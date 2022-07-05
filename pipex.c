@@ -1,6 +1,25 @@
 #include "libft/libft.h"
+#include <stdio.h>
+#include <fcntl.h>
 int main(int argc, char *argv[])
 {
+	int id = fork();
+	int fdinfile = open("infile.txt", o_rdonly);
+	
+	if (id == 0)
+	{
+		close(1);
+		char *buffer;
+		write(fd[0], &buffer, ft_strlen(argv[1]));
+	}
+	else
+	{
+		close(0);
+
+	}
+
+	
+
 	char *binaryPath = "/bin/bash";
 	char *infile;
 	char *cmd1;
