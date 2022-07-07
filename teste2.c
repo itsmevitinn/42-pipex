@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 		close(fd[1]);
 		dup2(fdoutfile, 1);
 		read(fd[0], buffer, 6);
-		printf("bufer: %s", buffer);
+		write(1, buffer, 6);
 		close(fd[0]);
 	}
 	else
@@ -30,9 +30,6 @@ int main(int argc, char *argv[])
 		read(0, buffer, 6);
 		write(fd[1], buffer, 6);
 		close(fd[1]);
-		// close(fd[0]);
-		// write(fd[1], "arroz", 4);
-		// close(fd[1]);
 	}
 }
 
