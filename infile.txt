@@ -1,3 +1,2 @@
-pipoca
-tem
-sal
+pipoca tem sal
+arroz
