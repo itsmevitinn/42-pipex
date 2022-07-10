@@ -7,12 +7,17 @@ int main(int argc, char *argv[])
 {
 	int fdinfile = open("infile.txt", O_RDONLY);
 	int fdoutfile = open("outfile.txt", O_WRONLY);
+	if (fdinfile == -1 || fdoutfile == -1)
+		perror("Failed to open file!");
 	int readWrite[2];
 	if (pipe(readWrite) == -1)
 		perror("Failed to create pipe!");
-	//parent's fork return pid of child
+	// parent's fork return pid of child
 	int pid = fork();
-	if (pid == 0)
+	if (pid == -1)
+		perror("Failed to do fork!");
+	// child
+	else if (pid == 0)
 	{
 		close(readWrite[0]);
 		dup2(readWrite[1], 1);
