@@ -8,7 +8,6 @@ int main(int argc, char *argv[])
 	int fdinfile = open("infile.txt", O_RDONLY);
 	int fdoutfile = open("outfile.txt", O_WRONLY);
 	int readWrite[2];
-	pipe(readWrite);
 	if (pipe(readWrite) == -1)
 		perror("Failed to create pipe!");
 	//fork return pid of child
