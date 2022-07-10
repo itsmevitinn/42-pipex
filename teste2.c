@@ -9,9 +9,10 @@ int main(int argc, char *argv[])
 	int fdoutfile = open("outfile.txt", O_WRONLY);
 	int readWrite[2];
 	pipe(readWrite);
+	if (pipe(readWrite) == -1)
+		perror("Failed to create pipe!");
 	//fork return pid of child
 	int pid = fork();
-	
 	if (pid == 0)
 	{
 		close(readWrite[0]);
