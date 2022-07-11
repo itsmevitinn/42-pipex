@@ -12,7 +12,7 @@ int pathexecv1(char *argv[])
 	count = 0;
 	j = 0;
 	i = 0;
-	arguments = ft_split(argv[1], ' ');
+	arguments = ft_split(argv[2], ' ');
 	while (environ[i])
 	{
 		if (ft_strncmp(environ[i], "PATH=", 5) == 0)
@@ -31,7 +31,7 @@ int pathexecv1(char *argv[])
 	}
 	return (0);
 }
-int main(int argc, char *argv[])
-{
-	pathexecv1(argv);
-}
+// int main(int argc, char *argv[])
+// {
+// 	pathexecv1(argv);
+// }
