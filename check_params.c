@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <errno.h>
-#include <stdlib.h>
 #include "pipex.h"
 int check_params(int arg)
 {

@@ -1,13 +1,15 @@
 #include "pipex.h"
 int main(int argc, char *argv[])
 {
-	int fdoutfile = open(argv[4], O_WRONLY | O_CREAT);
+	int fdinfile = open(argv[1], O_RDONLY);
+	int fdoutfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0444);
 	int readWrite[2];
 	int pid;
 	check_params(argc);
-	if (fdoutfile == -1)
+	// errorhandling(fdinfile, fdoutfile);
+	if (fdinfile == -1 | fdoutfile == -1)
 	{
-		perror("Failed to open outfile!");
+		perror("Failed to open file");
 		exit(1);
 	}
 	if (pipe(readWrite) == -1)
@@ -24,6 +26,7 @@ int main(int argc, char *argv[])
 	}
 	else if (pid == 0)
 	{
+		dup2(fdinfile, 0);
 		close(readWrite[0]);
 		dup2(readWrite[1], 1);
 		pathexecv1(argv);
@@ -45,17 +48,11 @@ void	pathexecv1(char *argv[])
 	extern char **environ;
 	char **paths;
 	char **arguments;
-	char *infile;
 	int i;
-	int params;
 	int j;
-	params = 0;
 	j = 0;
 	i = 0;
-	infile = argv[1];
 	arguments = ft_split(argv[2], ' ');
-	while (arguments[params])
-		params++;
 	while (environ[i])
 	{
 		if (ft_strncmp(environ[i], "PATH=", 5) == 0)
@@ -67,10 +64,7 @@ void	pathexecv1(char *argv[])
 		paths[j] = ft_strjoin(paths[j], "/");
 		paths[j] = ft_strjoin(paths[j], arguments[0]);
 		if (!access(paths[j], F_OK | X_OK))
-		{
-			arguments[params] = infile;
 			execve(paths[j], arguments, NULL);	
-		}
 		j++;
 	}
 }
