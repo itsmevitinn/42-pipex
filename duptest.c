@@ -1,13 +1,15 @@
-#include <unistd.h>
-#include <stdlib.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
+
 int main(void)
 {
-	int fdinfile = open("infile.txt", O_RDONLY, 0777);
-	dup2(fdinfile, 0);
-	char *buffer;
-	buffer = malloc(4);
-	read(1, buffer, 4);
-	printf("%s", buffer);
+	int fdoutfile = open("outfile.txt", O_WRONLY);
+	
+	dup2(fdoutfile, 1);
+	char *writefile;
+	writefile = malloc(15);
+	read(0, writefile, 15);
+	write(1, writefile, 15);
 }
