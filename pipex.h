@@ -2,6 +2,8 @@
 # define PIPEX_H
 
 # include "libft/libft.h"
+# include <stdio.h>
+# include <fcntl.h>
 
 int		check_params(int arg);
 void	pathexecv1(char *argv[]);
