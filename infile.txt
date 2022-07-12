@@ -1,2 +1,2 @@
-pipoca tem sal
+tem sal
 arroz
