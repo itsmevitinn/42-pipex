@@ -3,6 +3,7 @@
 
 # include "libft/libft.h"
 
-int	check_params(int arg);
-int pathexecv1(char *argv[]);
+int		check_params(int arg);
+void	pathexecv1(char *argv[]);
+void	pathexecv2(char *argv[]);
 #endif

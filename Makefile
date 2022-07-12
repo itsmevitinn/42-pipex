@@ -8,7 +8,7 @@ NAME	= libftpipex.a
 
 CPLIBFT = cp ${LIBFT_PATH}/libft.a libftpipex.a
 
-SRCS	= check_params.c pathexecv1.c
+SRCS	= pathexecv1.c pathexecv2.c
 
 OBJS	= ${SRCS:.c=.o}
 

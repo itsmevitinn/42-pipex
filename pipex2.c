@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 	int fdoutfile = open("outfile.txt", O_WRONLY);
 	int readWrite[2];
 	int pid;
-	check_params(argc);
+	// check_params(argc);
 	if (fdinfile == -1 || fdoutfile == -1)
 	{
 		perror("Failed to open file!");
@@ -27,7 +27,6 @@ int main(int argc, char *argv[])
 		perror("Failed to do fork!");
 		exit(1);
 	}
-	// child
 	else if (pid == 0)
 	{
 		close(readWrite[0]);
@@ -41,18 +40,10 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		char *buffer;
-		buffer = malloc(50);
 		close(readWrite[1]);
 		wait(&pid);
 		dup2(readWrite[0], 0);
-		char *const args[] = {argv[3], NULL};
-		char *const env[] = {NULL};
-		if (execve("/usr/bin/wc", args, env) == -1 )
-		{
-			perror("Second execve failed");
-			exit(1);
-		}
+		pathexecv2(argv);
 		close(readWrite[0]);
 	}
 }
