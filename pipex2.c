@@ -2,10 +2,9 @@
 int main(int argc, char *argv[])
 {
 	int fdinfile = open(argv[1], O_RDONLY);
-	int fdoutfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	int fdoutfile = open(argv[4], O_WRONLY | O_TRUNC | O_CREAT, 0666);
 	int readWrite[2];
 	int pid;
-	int pid2;
 	check_params(argc);
 	errorhandling(fdinfile, fdoutfile);
 	if (pipe(readWrite) == -1)
@@ -28,17 +27,12 @@ int main(int argc, char *argv[])
 		pathexecv1(argv);
 		close(readWrite[1]);
 	}
-	pid2 = fork();
-	// if (pid2 == -1)
-	if (pid2 == 0)
-	{
-		close(readWrite[1]);
-		dup2(readWrite[0], 0);
-		dup2(fdoutfile, 1);
-		pathexecv2(argv);
-		close(readWrite[0]);
-	}
 	waitpid(pid, NULL, 0);
+	close(readWrite[1]);
+	dup2(readWrite[0], 0);
+	dup2(fdoutfile, 1);
+	pathexecv2(argv);
+	close(readWrite[0]);
 }
 
 void	pathexecv1(char *argv[])
@@ -98,8 +92,7 @@ void	errorhandling(int fdinfile, int fdoutfile)
 {
 	if (fdinfile == -1 | fdoutfile == -1)
 	{
-		perror("Failed to open file");
+		perror("Failed to open files");
 		exit(1);
 	}
-	// return (0);
 }
