@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/13 20:49:12 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/14 00:42:34 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,14 @@ int	main(int argc, char *argv[])
 	check_params(argc);
 	fdinfile = open(argv[1], O_RDONLY);
 	fdoutfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	checkfiles(fdinfile, fdoutfile);
+	checker(fdinfile, fdoutfile, 0);
 	if (pipe(readwrite) == -1)
 	{
 		perror("Failed to create pipe!");
 		exit(1);
 	}
-	// parent's fork return pid of child
 	pid = fork();
-	checkpid(pid);
+	checker(0, 0, pid);
 	if (pid == 0)
 	{
 		close(readwrite[0]);
@@ -41,7 +40,7 @@ int	main(int argc, char *argv[])
 		close(readwrite[1]);
 	}
 	pid2 = fork();
-	checkpid(pid2);
+	checker(0, 0, pid2);
 	if (pid2 == 0)
 	{
 		close(readwrite[1]);
@@ -78,23 +77,24 @@ void	pathexecv(char *argv)
 			execve(paths[j], arguments, NULL);
 		j++;
 	}
-	// free(paths[j]);
+	free(paths[j]);
 }
 
-void	checkfiles(int fdinfile, int fdoutfile)
+void	checker(int fdinfile, int fdoutfile, int pid)
 {
-	if (fdinfile == -1 | fdoutfile == -1)
+	if (fdinfile == -1)
 	{
-		perror("Failed to open file");
+		perror("Failed to open infile");
 		exit(1);
 	}
-}
-
-void	checkpid(int pid)
-{
-	if (pid == -1)
+	else if (fdoutfile == -1)
 	{
-		perror("Failed to do first/second fork!");
+		perror("Failed to open outfile!");
+		exit(1);
+	}
+	else if (pid == -1)
+	{
+		perror("Failed to do fork!");
 		exit(1);
 	}
 }

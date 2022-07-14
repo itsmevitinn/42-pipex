@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:14:39 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/13 22:29:11 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/14 00:42:48 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@
 # include <stdio.h>
 # include <fcntl.h>
 
-void	checkfiles(int fdinfile, int fdoutfile);
-void	checkpid(int pid);
-int		check_params(int arg);
+void	checker(int fdinfile, int fdoutfile, int pid);
+void	check_params(int arg);
 void	pathexecv(char *argv);
 void	runcommand(int unusedpipefd, int inputread, int output, char *argv);
 #endif
