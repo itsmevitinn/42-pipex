@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:25:35 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/14 18:42:32 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/14 19:03:01 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,6 @@ void	check_params(int arg)
 	{
 		errno = EINVAL;
 		perror("");
-		exit(1);
+		exit(22);
 	}
 }
