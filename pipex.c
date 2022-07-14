@@ -6,12 +6,11 @@
 /*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/14 15:39:05 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/14 18:59:40 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-#include <string.h>
 int	main(int argc, char *argv[])
 {
 	int	fdinfile;
@@ -26,30 +25,22 @@ int	main(int argc, char *argv[])
 	checker(fdinfile, fdoutfile, 0);
 	if (pipe(readwrite) == -1)
 	{
-		perror("Failed to create pipe!");
-		exit(1);
+		perror("Failed to do pipe!");
+		exit(32);
 	}
 	pid = fork();
 	checker(0, 0, pid);
 	if (pid == 0)
-	{
-		close(readwrite[0]);
-		dup2(fdinfile, 0);
-		dup2(readwrite[1], 1);
-		pathexecv(argv[2]);
-		close(readwrite[1]);
-	}
+		runcommand(readwrite[0], fdinfile, readwrite[1], argv[2]);	
 	pid2 = fork();
 	checker(0, 0, pid2);
 	if (pid2 == 0)
-	{
-		close(readwrite[1]);
-		dup2(readwrite[0], 0);
-		dup2(fdoutfile, 1);
-		pathexecv(argv[3]);
-		close(readwrite[0]);
-	}
+		runcommand(readwrite[1], readwrite[0], fdoutfile, argv[3]);
+	close(readwrite[0]);
+	close(readwrite[1]);
 	waitpid(pid, NULL, 0);
+	waitpid(pid2, NULL, 0);
+	return (0);
 }
 
 void	pathexecv(char *argv)
@@ -57,6 +48,7 @@ void	pathexecv(char *argv)
 	extern char	**environ;
 	char		**paths;
 	char		**arguments;
+	char		*commandpath;
 	int			i;
 	int			j;
 
@@ -72,14 +64,15 @@ void	pathexecv(char *argv)
 	while (paths[j])
 	{
 		paths[j] = ft_strjoin(paths[j], "/");
-		paths[j] = ft_strjoin(paths[j], arguments[0]);
-		if (!access(paths[j], F_OK | X_OK))
-			execve(paths[j], arguments, NULL);
-		else
-			printf("command not found: %s -> %s", argv, strerror(2));
+		commandpath = ft_strjoin(paths[j], arguments[0]);
+		free(paths[j]);
+		if (!access(commandpath, F_OK | X_OK))
+			execve(commandpath, arguments, NULL);
+		free(commandpath);
 		j++;
 	}
-	free(paths[j]);
+	freeargs(arguments);
+	perror("command not found");
 }
 
 void	checker(int fdinfile, int fdoutfile, int pid)
@@ -87,16 +80,24 @@ void	checker(int fdinfile, int fdoutfile, int pid)
 	if (fdinfile == -1)
 	{
 		perror("Failed to open infile");
-		exit(1);
+		exit(2);
 	}
 	else if (fdoutfile == -1)
 	{
 		perror("Failed to open outfile!");
-		exit(1);
+		exit(2);
 	}
 	else if (pid == -1)
 	{
 		perror("Failed to do fork!");
-		exit(1);
+		exit(10);
 	}
+}
+
+void	runcommand(int unusedpipefd, int inputread, int output, char *argv)
+{
+	close(unusedpipefd);
+	dup2(inputread, 0);
+	dup2(output, 1);
+	pathexecv(argv);
 }

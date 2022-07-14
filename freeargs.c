@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_params.c                                     :+:      :+:    :+:   */
+/*   freeargs.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/13 13:25:35 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/14 18:42:32 by vsergio          ###   ########.fr       */
+/*   Created: 2022/07/14 17:56:23 by vsergio           #+#    #+#             */
+/*   Updated: 2022/07/14 17:57:28 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "pipex.h"
-
-void	check_params(int arg)
+#include <stdlib.h>
+void	freeargs(char **arguments)
 {
-	if (arg != 5)
+	int i;
+	i = 0;
+	while (arguments[i])
 	{
-		errno = EINVAL;
-		perror("");
-		exit(1);
+		free(arguments[i]);
+		i++;
 	}
+	free (arguments);
 }
