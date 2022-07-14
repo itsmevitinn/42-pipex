@@ -6,11 +6,11 @@
 /*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:19 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/14 00:38:07 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/14 15:31:51 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "pipex.h"
+#include <string.h>
 
 int	main(int argc, char *argv[])
 {
@@ -61,6 +61,8 @@ void	pathexecv(char *argv)
 		paths[j] = ft_strjoin(paths[j], arguments[0]);
 		if (!access(paths[j], F_OK | X_OK))
 			execve(paths[j], arguments, NULL);
+		else
+			printf("command not found: %s -> %s", argv, strerror(2));
 		j++;
 	}
 	free(paths[j]);
