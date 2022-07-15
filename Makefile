@@ -4,11 +4,13 @@ MAKE_IN_DIRECTORY = make -C
 
 MAKELIBFT = ${MAKE_IN_DIRECTORY} ${LIBFT_PATH}
 
-NAME	= libftpipex.a
+NAME	= pipex
+
+LIBNAME = libftpipex.a
 
 CPLIBFT = cp ${LIBFT_PATH}/libft.a libftpipex.a
 
-SRCS	= check_params.c freeargs.c
+SRCS	= check_params.c freeargs.c 
 
 OBJS	= ${SRCS:.c=.o}
 
@@ -24,7 +26,8 @@ AR_RCS 	= ar rcs
 			${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 $(NAME):	${OBJS}
-			${MAKELIBFT} && ${CPLIBFT} && ${AR_RCS} ${NAME} ${OBJS}  
+			${MAKELIBFT} && ${CPLIBFT} && ${AR_RCS} ${LIBNAME} ${OBJS}
+			${CC} pipex.c ${LIBNAME} -o ${NAME}
 
 all:		$(NAME)
 
@@ -33,6 +36,7 @@ clean:
 			${MAKE_IN_DIRECTORY} ${LIBFT_PATH} clean
 
 fclean:		clean
+			${RM} ${LIBNAME} 
 			${RM} ${NAME} 
 			${MAKE_IN_DIRECTORY} ${LIBFT_PATH} fclean
 

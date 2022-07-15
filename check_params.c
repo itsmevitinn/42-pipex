@@ -5,16 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/13 13:25:35 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/14 19:03:01 by vsergio          ###   ########.fr       */
+/*   Created: 2022/07/14 22:46:04 by vsergio           #+#    #+#             */
+/*   Updated: 2022/07/14 22:46:05 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	check_params(int arg)
+void	check_params(int argc)
 {
-	if (arg != 5)
+	if (argc != 5)
 	{
 		errno = EINVAL;
 		perror("");
