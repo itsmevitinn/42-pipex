@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_params.c                                     :+:      :+:    :+:   */
+/*   error_msg.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/14 22:46:04 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/14 22:46:05 by vsergio          ###   ########.fr       */
+/*   Created: 2022/07/15 09:21:47 by vsergio           #+#    #+#             */
+/*   Updated: 2022/07/15 09:21:55 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	check_params(int argc)
+void	error_msg(char *msg, int errorstatus)
 {
-	if (argc != 5)
-	{
-		errno = EINVAL;
-		perror("");
-		exit(22);
-	}
+	perror(msg);
+	exit(errorstatus);
 }

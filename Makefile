@@ -10,7 +10,7 @@ LIBNAME = libftpipex.a
 
 CPLIBFT = cp ${LIBFT_PATH}/libft.a libftpipex.a
 
-SRCS	= check_params.c freeargs.c 
+SRCS	= error_msg.c freeargs.c 
 
 OBJS	= ${SRCS:.c=.o}
 
