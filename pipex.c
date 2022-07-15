@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/14 22:45:32 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/14 22:51:36 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	checker(int pipe, int fdinfile, int fdoutfile, int pid)
 		perror("Failed to do pipe!");
 		exit(32);
 	}
-	if (fdinfile == -1)
+	else if (fdinfile == -1)
 	{
 		perror("Failed to open infile");
 		exit(2);
