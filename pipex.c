@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/15 11:40:18 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/15 13:36:19 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(int argc, char *argv[], char **envp)
 	if (argc != 5)
 	{
 		errno = 22;
-		error_msg("", 22);
+		error_msg("ERROR", 22);
 	}
 	if (pipe(readwrite) == -1)
 		error_msg("Failed to do pipe!", 32);
@@ -35,70 +35,69 @@ int	main(int argc, char *argv[], char **envp)
 		error_msg("Failed to do second fork!", 10);
 	else if (pid2 == 0)
 		secondchild(argv, readwrite, envp);
-	close(readwrite[0]);
-	close(readwrite[1]);
+	closepipes(readwrite);
 	waitpid(pid, NULL, 0);
 	waitpid(pid2, NULL, 0);
 	return (0);
 }
 
-void	firstchild(char **argv, int *readwrite)
+void	firstchild(char **argv, int *readwrite, char **envp)
 {
-	int fdinfile;
+	int	fdinfile;
 
 	fdinfile = open(argv[1], O_RDONLY);
 	if (fdinfile == -1)
 		error_msg("Failed to open infile!", 2);
-	runcommand(readwrite[0], fdinfile, readwrite[1], argv[2]);
+	close(readwrite[0]);
+	dup2(fdinfile, 0);
+	dup2(readwrite[1], 1);
+	pathexecv(argv[2], envp);
 }
 
-void	secondchild(char **argv, int *readwrite)
+void	secondchild(char **argv, int *readwrite, char **envp)
 {
-	int fdoutfile;
+	int	fdoutfile;
 
 	fdoutfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (fdoutfile == -1)
 		error_msg("Failed to open file!", 2);
-	runcommand(readwrite[1], readwrite[0], fdoutfile, argv[3]);
+	close(readwrite[1]);
+	dup2(readwrite[0], 0);
+	dup2(fdoutfile, 1);
+	pathexecv(argv[3], envp);
 }
 
 void	pathexecv(char *argv, char **envp)
 {
 	char		**paths;
 	char		**arguments;
-	char 		*completepath;
+	char		*pathdone;
 	char		*commandpath;
-	int i;
+	int			i;
 
 	i = 0;
-
 	arguments = ft_split(argv, ' ');
-	while (*envp++)
+	while (envp[i])
 	{
-		if (ft_strncmp(*envp, "PATH=", 5) == 0)
-			paths = ft_split(*envp + 5, ':');
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+			paths = ft_split(&envp[i][5], ':');
+		i++;
 	}
-	while (*paths++)
+	i = 0;
+	while (paths[i++])
 	{
-		completepath = ft_strjoin(*paths, "/");
-		commandpath = ft_strjoin(completepath, arguments[0]);
-		free(completepath);
+		pathdone = ft_strjoin(paths[i], "/");
+		commandpath = ft_strjoin(pathdone, arguments[0]);
+		free(pathdone);
 		if (!access(commandpath, F_OK | X_OK))
-		{
-			// execve(commandpath, arguments, NULL);
-			write(1, "hi", 2);
-			exit(1);
-		}
+			execve(commandpath, arguments, NULL);
 		free(commandpath);
 	}
-	freeargs(arguments);
-	perror("command not found");
+	perror("Command not found!");
 }
 
-void	runcommand(int unusedpipefd, int inputread, int output, char *argv)
+void	closepipes(int *pipe)
 {
-	close(unusedpipefd);
-	dup2(inputread, 0);
-	dup2(output, 1);
-	pathexecv(argv);
+	close(pipe[0]);
+	close(pipe[1]);
 }
