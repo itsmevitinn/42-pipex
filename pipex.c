@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
+/*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/15 23:39:12 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/17 19:50:38 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-int	main(int argc, char *argv[], char **envp)
+#include <stdio.h>
+int	main(int argc, char **argv, char **env)
 {
 	int	readwrite[2];
 	int	pid;
@@ -26,12 +26,12 @@ int	main(int argc, char *argv[], char **envp)
 	if (pid == -1)
 		error_msg("Failed to do first fork!", 10);
 	else if (pid == 0)
-		firstchild(argv, readwrite, envp);
+		firstchild(argv, readwrite, env);
 	pid2 = fork();
 	if (pid2 == -1)
 		error_msg("Failed to do second fork!", 10);
 	else if (pid2 == 0)
-		secondchild(argv, readwrite, envp);
+		secondchild(argv, readwrite, env);
 	close(readwrite[0]);
 	close(readwrite[1]);
 	waitpid(pid, NULL, 0);
@@ -39,7 +39,7 @@ int	main(int argc, char *argv[], char **envp)
 	return (0);
 }
 
-void	firstchild(char **argv, int *readwrite, char **envp)
+void	firstchild(char **argv, int *readwrite, char **env)
 {
 	int	fdinfile;
 
@@ -49,10 +49,10 @@ void	firstchild(char **argv, int *readwrite, char **envp)
 	close(readwrite[0]);
 	dup2(fdinfile, 0);
 	dup2(readwrite[1], 1);
-	pathfilter(argv[2], envp);
+	pathfilter(argv[2], env);
 }
 
-void	secondchild(char **argv, int *readwrite, char **envp)
+void	secondchild(char **argv, int *readwrite, char **env)
 {
 	int	fdoutfile;
 
@@ -62,10 +62,10 @@ void	secondchild(char **argv, int *readwrite, char **envp)
 	close(readwrite[1]);
 	dup2(readwrite[0], 0);
 	dup2(fdoutfile, 1);
-	pathfilter(argv[3], envp);
+	pathfilter(argv[3], env);
 }
 
-void	pathfilter(char *argv, char **envp)
+void	pathfilter(char *argv, char **env)
 {
 	char		**paths;
 	char		**arguments;
@@ -76,10 +76,10 @@ void	pathfilter(char *argv, char **envp)
 	arguments = ft_split(argv, ' ');
 	while (arguments[countargs++])
 		arguments[countargs] = ft_strtrim(arguments[countargs], "'");
-	while (envp[i])
+	while (env[i])
 	{
-		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-			paths = ft_split(&envp[i][5], ':');
+		if (ft_strncmp(env[i], "PATH=", 5) == 0)
+			paths = ft_split(&env[i][5], ':');
 		i++;
 	}
 	doexecve(paths, arguments);

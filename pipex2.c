@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
+/*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/16 23:35:30 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/17 20:25:05 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,9 @@ int	main(int argc, char *argv[], char **envp)
 	i = 0;
 	// if (argc != 6)
 	// 	error_msg_errno("ERROR", 22, 22);
-	while (countpipe++ < argc - 4)
-	{
-		if (pipe(readwrite[countpipe]) == -1)
+	while (countpipe < argc - 4)
+		if (pipe(readwrite[countpipe++]) == -1)
 			error_msg("Failed to do pipe!", 32);
-	}
 	while(i++ < argc - 3)
 	{
 		pid[countpid] = fork();
@@ -204,8 +202,8 @@ void	pathfilter(char *argv, char **envp)
 
 	i = 0;
 	arguments = ft_split(argv, ' ');
-	while (arguments[countargs++])
-		arguments[countargs] = ft_strtrim(arguments[countargs], "'");
+	// while (arguments[countargs++])
+	// 	arguments[countargs] = ft_strtrim(arguments[countargs], "'");
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
