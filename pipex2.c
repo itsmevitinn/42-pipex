@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/17 20:25:05 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/18 16:31:02 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,6 @@ int	main(int argc, char *argv[], char **envp)
 		{
 			int fdinfile;
 			fdinfile = open(argv[1], O_RDONLY);
-			close(readwrite[0][0]);
-			close(readwrite[1][0]);
-			close(readwrite[1][1]);
-			close(readwrite[2][0]);
-			close(readwrite[2][1]);
 			dup2(fdinfile, 0);
 			dup2(readwrite[0][1], 1)
 			firstcommand(argv[indexargv++], envp, &readwrite[1][2]);
