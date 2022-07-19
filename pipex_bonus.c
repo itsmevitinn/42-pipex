@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/19 02:49:27 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/19 16:56:04 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 int main(int argc, char *argv[], char **env)
 {
@@ -62,15 +62,16 @@ int main(int argc, char *argv[], char **env)
 		runcmds(argv[argc - 2], readwrite[countpid - 1][0], fdoutfile, env);
 	}
 	close_all(argc, readwrite);
-	wait(pid);
+	// wait(pid);
 	return (0);
 }
 
 void close_all(int argc, int readwrite[argc - 4][2])
 {
 	int index;
+
 	index = 0;
-	while (readwrite[index])
+	while (index < argc - 4)
 	{
 		close(readwrite[index][0]);
 		close(readwrite[index][1]);
@@ -84,14 +85,19 @@ void close_first_command(int argc, int readwrite[argc - 4][2])
 
 	indexchecker = 0;
 
-	while (readwrite[indexchecker])
+	while (indexchecker < argc - 4)
 	{
 		if (indexchecker == 0)
+		{
 			close(readwrite[indexchecker][0]); // fecho apenas a leitura do pipe 0 pois a escrita eu utilizo
+			printf("Pipe leitura first fechado: %i", readwrite[indexchecker][0]);
+		}
 		else
 		{
 			close(readwrite[indexchecker][0]);
 			close(readwrite[indexchecker][1]);
+			printf("Pipes adicionais first fechados: %i", readwrite[indexchecker][0]);
+			printf("Pipes adicionais first fechados: %i", readwrite[indexchecker][1]);
 		}
 		indexchecker++;
 	}
@@ -103,7 +109,7 @@ void close_middle_commands(int argc, int readwrite[argc - 4][2], int indexpipe)
 
 	indexchecker = 0;
 
-	while (readwrite[indexchecker])
+	while (indexchecker < argc - 4)
 	{
 		if (indexchecker == indexpipe - 1)
 			close(readwrite[indexchecker][1]); // fecho a escrita do pipe anterior e preservo a leitura do pipe anterior
@@ -124,7 +130,7 @@ void close_last_command(int argc, int readwrite[argc - 4][2], int indexpipe)
 
 	indexchecker = 0;
 
-	while (readwrite[indexchecker])
+	while (indexchecker < argc - 4)
 	{
 		if (indexchecker == indexpipe - 1)
 			close(readwrite[indexchecker][1]); // fecho a escrita do pipe anterior e preservo a leitura
