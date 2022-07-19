@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/19 02:41:56 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/19 02:49:27 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void close_first_command(int argc, int readwrite[argc - 4][2])
 	while (readwrite[indexchecker])
 	{
 		if (indexchecker == 0)
-			close(readwrite[indexchecker][0]); // no primeiro pipe fecho a leitura dele, pois apenas escrevo.
+			close(readwrite[indexchecker][0]); // fecho apenas a leitura do pipe 0 pois a escrita eu utilizo
 		else
 		{
 			close(readwrite[indexchecker][0]);
@@ -106,9 +106,9 @@ void close_middle_commands(int argc, int readwrite[argc - 4][2], int indexpipe)
 	while (readwrite[indexchecker])
 	{
 		if (indexchecker == indexpipe - 1)
-			close(readwrite[indexchecker][1]); // fecho a leitura do pipe atual pois leio do pipe anterior						   // fecho a escrita do pipe anterior pois escrevo no pipe atual
-		else if (indexchecker == indexpipe)	   // fecho tudo que nao uso
-			close(readwrite[indexchecker][0]);
+			close(readwrite[indexchecker][1]); // fecho a escrita do pipe anterior e preservo a leitura do pipe anterior
+		else if (indexchecker == indexpipe)
+			close(readwrite[indexchecker][0]); // fecho a leitura atual pois uso a leitura do pipe anterior
 		else
 		{
 			close(readwrite[indexchecker][0]);
@@ -127,7 +127,7 @@ void close_last_command(int argc, int readwrite[argc - 4][2], int indexpipe)
 	while (readwrite[indexchecker])
 	{
 		if (indexchecker == indexpipe - 1)
-			close(readwrite[indexchecker][1]); // fecho apenas a escrita do pipe que estou pois apenas leio
+			close(readwrite[indexchecker][1]); // fecho a escrita do pipe anterior e preservo a leitura
 		else								   // fecho tudo
 		{
 			close(readwrite[indexchecker][0]);
