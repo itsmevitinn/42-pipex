@@ -6,27 +6,42 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/20 00:13:36 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/20 16:56:56 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+#include "libft/libft.h"
 
 int main(int argc, char *argv[], char **env)
 {
-	int readwrite[argc - 4][2]; // a quantidade de pipes sera sempre a quantidade de comandos - 1
+	int **readwrite; // a quantidade de pipes sera sempre a quantidade de comandos - 1
 	int countpipe;
 	int pid[argc - 3]; // 1 fork para cada comando, comando = argc - 3
 	int countpid;
+	int allocate;
+	int countwait;
 
+	countwait = 0;
+	allocate = 0;
+	readwrite = (int **)malloc(sizeof(int *) * (argc - 3)); // eh -3 e nao -4 pois estamos trabalhando com aloocamento, e a contagem comeca no 1, diferente do array que comeca no 0
+	while (allocate < argc - 3) // aqui a mesma coisa, ex.: temos 3 comandos, ou seja, 6 argumentos - 3 = 3 (comandos), 0 eh menor que 3 ? sim, 1 eh menor que 3? sim, 2 eh menor que 3 ? sim ... ou seja, 3 alocamentos (1 p cada comando)
+	{
+		printf("8 bytes mallocados para as colunas da matriz: readwrite[%i]\n", allocate);
+		readwrite[allocate] = (int *)malloc(sizeof(int) * 2);
+		allocate++;
+	}
 	countpid = 0;
 	countpipe = 0;
 	if (argc < 5)
 		error_msg_errno("ERROR", 22, 22);
 	while (countpipe < argc - 3)
 	{
-		if (pipe(readwrite[countpipe++]) == -1)
-			error_msg("Failed to do pipe!", 32);
+		// if (pipe(readwrite[countpipe++]) == -1)
+			// error_msg("Failed to do pipe!", 32);
+		if (pipe(readwrite[countpipe]) == 0)
+			printf("Pipe posicao [%i] criado!\n", countpipe);
+		countpipe++;
 	}
 	pid[countpid] = fork();
 	if (pid[countpid] == 0)
@@ -56,11 +71,17 @@ int main(int argc, char *argv[], char **env)
 		runcmds(argv[argc - 2], readwrite[countpid - 1][0], fdoutfile, env);
 	}
 	close_all(argc, readwrite);
-	waitpid(pid[countpid], NULL, 0);
+	while (countwait < argc - 3)
+	{
+		int res;
+		res = waitpid(pid[countwait], NULL, 0);
+		printf("I waited for my child ID: %i\n", res);
+		countwait++;
+	}
 	return (0);
 }
 
-void close_all(int argc, int readwrite[argc - 4][2])
+void close_all(int argc, int **readwrite)
 {
 	int index;
 
@@ -73,7 +94,7 @@ void close_all(int argc, int readwrite[argc - 4][2])
 	}
 }
 
-void close_first_command(int argc, int readwrite[argc - 4][2])
+void close_first_command(int argc, int **readwrite)
 {
 	int indexchecker;
 
@@ -94,7 +115,7 @@ void close_first_command(int argc, int readwrite[argc - 4][2])
 	}
 }
 
-void close_middle_commands(int argc, int readwrite[argc - 4][2], int indexpipe)
+void close_middle_commands(int argc, int **readwrite, int indexpipe)
 {
 	int indexchecker;
 
@@ -115,7 +136,7 @@ void close_middle_commands(int argc, int readwrite[argc - 4][2], int indexpipe)
 	}
 }
 
-void close_last_command(int argc, int readwrite[argc - 4][2], int indexpipe)
+void close_last_command(int argc, int **readwrite, int indexpipe)
 {
 	int indexchecker;
 
@@ -149,11 +170,12 @@ void pathfilter(char *argv, char **env)
 	char **arguments;
 	int i;
 	int countargs;
-
+	
+	countargs = 0;
 	i = 0;
 	arguments = ft_split_quotes(argv, ' ');
-	// while (arguments[countargs++])
-	// 	arguments[countargs] = ft_strtrim(arguments[countargs], "'\"");
+	while (arguments[countargs++])
+		arguments[countargs] = ft_strtrim(arguments[countargs], "'\"");
 	while (env[i])
 	{
 		if (ft_strncmp(env[i], "PATH=", 5) == 0)

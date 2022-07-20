@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:14:39 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/19 02:01:53 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/20 11:18:34 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 # include <string.h>
 # include <sys/wait.h>
 
-void    close_all(int argc, int readwrite[argc - 4][2]);
-void    close_first_command(int argc, int readwrite[argc - 4][2]);
-void	close_middle_commands(int argc, int readwrite[argc - 4][2], int indexpipe);
-void	close_last_command(int argc, int readwrite[argc - 4][2], int indexpipe);
+void    close_all(int argc, int **readwrite);
+void    close_first_command(int argc, int **readwrite);
+void	close_middle_commands(int argc, int **readwrite, int indexpipe);
+void	close_last_command(int argc, int **readwrite, int indexpipe);
 void	runcmds(char *argv, int input, int output, char **env);
 void	doexecve(char **paths, char **arguments);
 void	error_msg(char *msg, int errorstatus);
