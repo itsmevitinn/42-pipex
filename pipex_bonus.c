@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/19 16:56:04 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/20 00:13:36 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,12 @@ int main(int argc, char *argv[], char **env)
 		error_msg_errno("ERROR", 22, 22);
 	while (countpipe < argc - 3)
 	{
-		if (pipe(readwrite[countpipe]) == 0)
-		{
-			printf("Pipe [%i]\n", countpipe);
-			countpipe++;
-		}
+		if (pipe(readwrite[countpipe++]) == -1)
+			error_msg("Failed to do pipe!", 32);
 	}
 	pid[countpid] = fork();
 	if (pid[countpid] == 0)
 	{
-		printf("First Child [%i]\n", countpid);
 		int fdinfile;
 		fdinfile = open(argv[1], O_RDONLY);
 		close_first_command(argc, readwrite);
@@ -46,7 +42,6 @@ int main(int argc, char *argv[], char **env)
 		pid[countpid] = fork();
 		if (pid[countpid] == 0)
 		{
-			printf("Mid child [%i]\n", countpid);
 			close_middle_commands(argc, readwrite, countpid);
 			runcmds(argv[countpid + 2], readwrite[countpid - 1][0], readwrite[countpid][1], env);
 		}
@@ -55,14 +50,13 @@ int main(int argc, char *argv[], char **env)
 	pid[countpid] = fork();
 	if (pid[countpid] == 0)
 	{
-		printf("Last child [%i]\n", countpid);
 		int fdoutfile;
 		fdoutfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 		close_last_command(argc, readwrite, countpid);
 		runcmds(argv[argc - 2], readwrite[countpid - 1][0], fdoutfile, env);
 	}
 	close_all(argc, readwrite);
-	// wait(pid);
+	waitpid(pid[countpid], NULL, 0);
 	return (0);
 }
 
@@ -90,14 +84,11 @@ void close_first_command(int argc, int readwrite[argc - 4][2])
 		if (indexchecker == 0)
 		{
 			close(readwrite[indexchecker][0]); // fecho apenas a leitura do pipe 0 pois a escrita eu utilizo
-			printf("Pipe leitura first fechado: %i", readwrite[indexchecker][0]);
 		}
 		else
 		{
 			close(readwrite[indexchecker][0]);
 			close(readwrite[indexchecker][1]);
-			printf("Pipes adicionais first fechados: %i", readwrite[indexchecker][0]);
-			printf("Pipes adicionais first fechados: %i", readwrite[indexchecker][1]);
 		}
 		indexchecker++;
 	}
@@ -160,9 +151,9 @@ void pathfilter(char *argv, char **env)
 	int countargs;
 
 	i = 0;
-	arguments = ft_split(argv, ' ');
+	arguments = ft_split_quotes(argv, ' ');
 	// while (arguments[countargs++])
-	// 	arguments[countargs] = ft_strtrim(arguments[countargs], "'");
+	// 	arguments[countargs] = ft_strtrim(arguments[countargs], "'\"");
 	while (env[i])
 	{
 		if (ft_strncmp(env[i], "PATH=", 5) == 0)
