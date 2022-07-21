@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/21 00:22:17 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/21 00:36:36 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,19 @@ int	main(int argc, char *argv[], char **env)
 	int	**readwrite;// a quantidade de pipes sera sempre a quantidade de comandos - 1
 	int	countpipe;
 	int	countpid;
-	int	allocate;
 
-	countpipe = 0;
-	countpid = 0;
-	allocate = 0;
-	readwrite = (int **)malloc(sizeof(int *) * (argc - 3)); // eh -3 e nao -4 pois estamos trabalhando com aloocamento, e a contagem comeca no 1, diferente do array que comeca no 0
-	while (allocate < argc - 3) // aqui a mesma coisa, ex.: temos 3 comandos, ou seja, 6 argumentos - 3 = 3 (comandos), 0 eh menor que 3 ? sim, 1 eh menor que 3? sim, 2 eh menor que 3 ? sim ... ou seja, 3 alocamentos (1 p cada comando)
-	{
-		readwrite[allocate] = (int *)malloc(sizeof(int) * 2);
-		allocate++;
-	}
 	if (argc < 5)
 		error_msg_errno("ERROR", 22, 22);
+	countpipe = 0;
+	countpid = 0;
+	readwrite = (int **)malloc(sizeof(int *) * (argc - 3)); // eh -3 e nao -4 pois estamos trabalhando com aloocamento, e a contagem comeca no 1, diferente do array que comeca no 0
 	while (countpipe < argc - 3)
-		if (pipe(readwrite[countpipe++]) == -1)
+	{
+		readwrite[countpipe] = (int *)malloc(sizeof(int) * 2);
+		if (pipe(readwrite[countpipe]) == -1)
 			error_msg("Failed to do pipe!", 32);
+		countpipe++;
+	}
 	pid[countpid] = fork();
 	if (pid[countpid] == 0)
 		first_child(argv, argc, readwrite, env);
@@ -141,23 +138,4 @@ void	runcmds(char *argv, int input, int output, char **env)
 	dup2(output, 1);
 	close(output);
 	doexecve(paths, arguments);
-}
-
-void	doexecve(char **paths, char **arguments)
-{
-	char	*pathdone;
-	char	*commandpath;
-	int		i;
-
-	i = 0;
-	while (paths[i++])
-	{
-		pathdone = ft_strjoin(paths[i], "/");
-		commandpath = ft_strjoin(pathdone, arguments[0]);
-		free(pathdone);
-		if (!access(commandpath, F_OK | X_OK))
-			execve(commandpath, arguments, NULL);
-		free(commandpath);
-	}
-	perror("Command not found!");
 }
