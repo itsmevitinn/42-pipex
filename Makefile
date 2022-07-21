@@ -12,7 +12,7 @@ LIBNAME = libftpipex.a
 
 CPLIBFT = cp ${LIBFT_PATH}/libft.a libftpipex.a
 
-SRCS	= doexecve.c close_all.c error_msg.c 
+SRCS	= pipex_utils.c error_handling.c 
 
 OBJS	= ${SRCS:.c=.o}
 
