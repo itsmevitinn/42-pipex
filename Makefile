@@ -6,11 +6,13 @@ MAKELIBFT = ${MAKE_IN_DIRECTORY} ${LIBFT_PATH}
 
 NAME	= pipex
 
+NAME_BONUS	= pipex_bonus
+
 LIBNAME = libftpipex.a
 
 CPLIBFT = cp ${LIBFT_PATH}/libft.a libftpipex.a
 
-SRCS	= error_msg.c 
+SRCS	= close_all.c error_msg.c 
 
 OBJS	= ${SRCS:.c=.o}
 
@@ -27,7 +29,11 @@ AR_RCS 	= ar rcs
 
 $(NAME):	${OBJS}
 			${MAKELIBFT} && ${CPLIBFT} && ${AR_RCS} ${LIBNAME} ${OBJS}
-			${CC} pipex.c ${LIBNAME} -o ${NAME}
+			${CC} ${NAME}.c ${LIBNAME} -o ${NAME}
+
+bonus:		${OBJS}
+			${MAKELIBFT} && ${CPLIBFT} && ${AR_RCS} ${LIBNAME} ${OBJS}
+			${CC} ${NAME_BONUS}.c ${LIBNAME} -o ${NAME_BONUS}
 
 all:		$(NAME)
 
@@ -36,8 +42,7 @@ clean:
 			${MAKE_IN_DIRECTORY} ${LIBFT_PATH} clean
 
 fclean:		clean
-			${RM} ${LIBNAME} 
-			${RM} ${NAME} 
+			${RM} ${LIBNAME}
 			${MAKE_IN_DIRECTORY} ${LIBFT_PATH} fclean
 
 re:		fclean all

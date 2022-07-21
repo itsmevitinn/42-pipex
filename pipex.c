@@ -6,12 +6,12 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/17 19:50:38 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/20 23:40:09 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-#include <stdio.h>
+
 int	main(int argc, char **argv, char **env)
 {
 	int	readwrite[2];
@@ -27,6 +27,7 @@ int	main(int argc, char **argv, char **env)
 		error_msg("Failed to do first fork!", 10);
 	else if (pid == 0)
 		firstchild(argv, readwrite, env);
+	waitpid(pid, NULL, 0);
 	pid2 = fork();
 	if (pid2 == -1)
 		error_msg("Failed to do second fork!", 10);
@@ -34,8 +35,6 @@ int	main(int argc, char **argv, char **env)
 		secondchild(argv, readwrite, env);
 	close(readwrite[0]);
 	close(readwrite[1]);
-	waitpid(pid, NULL, 0);
-	waitpid(pid2, NULL, 0);
 	return (0);
 }
 
@@ -67,15 +66,16 @@ void	secondchild(char **argv, int *readwrite, char **env)
 
 void	pathfilter(char *argv, char **env)
 {
-	char		**paths;
-	char		**arguments;
-	int			i;
-	int			countargs;
+	char	**paths;
+	char	**arguments;
+	int		i;
+	int		countargs;
 
 	i = 0;
-	arguments = ft_split(argv, ' ');
+	countargs = 0;
+	arguments = ft_split_quotes(argv, ' ');
 	while (arguments[countargs++])
-		arguments[countargs] = ft_strtrim(arguments[countargs], "'");
+		arguments[countargs] = ft_strtrim(arguments[countargs], "'\"");
 	while (env[i])
 	{
 		if (ft_strncmp(env[i], "PATH=", 5) == 0)
@@ -87,9 +87,9 @@ void	pathfilter(char *argv, char **env)
 
 void	doexecve(char **paths, char **arguments)
 {
-	char		*pathdone;
-	char		*commandpath;
-	int			i;
+	char	*pathdone;
+	char	*commandpath;
+	int		i;
 
 	i = 0;
 	while (paths[i++])
