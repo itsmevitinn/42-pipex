@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*   pipex_utils_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 16:28:13 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/21 17:41:57 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/22 17:04:35 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ void	do_pipes(int argc, int **readwrite)
 			error_msg("Failed to do pipe!", 32);
 }
 
-void	free_pointers(int **readwrite, int *pid)
+void	free_pointers(int **readwrite, int *pid, int argc)
 {
 	int	i;
 
 	i = 0;
-	while (readwrite[i])
+	while (i < argc - 3)
 		free(readwrite[i++]);
 	free(readwrite);
 	free(pid);

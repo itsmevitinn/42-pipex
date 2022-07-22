@@ -6,13 +6,13 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/20 23:40:09 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/22 09:37:31 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	main(int argc, char **argv, char **env)
+int	main(int argc, char **argv)
 {
 	int	readwrite[2];
 	int	pid;
@@ -26,19 +26,20 @@ int	main(int argc, char **argv, char **env)
 	if (pid == -1)
 		error_msg("Failed to do first fork!", 10);
 	else if (pid == 0)
-		firstchild(argv, readwrite, env);
-	waitpid(pid, NULL, 0);
+		firstchild(argv, readwrite);
 	pid2 = fork();
 	if (pid2 == -1)
 		error_msg("Failed to do second fork!", 10);
 	else if (pid2 == 0)
-		secondchild(argv, readwrite, env);
+		secondchild(argv, readwrite);
 	close(readwrite[0]);
 	close(readwrite[1]);
+	waitpid(pid, NULL, 0);
+	waitpid(pid2, NULL, 0);
 	return (0);
 }
 
-void	firstchild(char **argv, int *readwrite, char **env)
+void	firstchild(char **argv, int *readwrite)
 {
 	int	fdinfile;
 
@@ -48,10 +49,10 @@ void	firstchild(char **argv, int *readwrite, char **env)
 	close(readwrite[0]);
 	dup2(fdinfile, 0);
 	dup2(readwrite[1], 1);
-	pathfilter(argv[2], env);
+	pathfilter(argv[2]);
 }
 
-void	secondchild(char **argv, int *readwrite, char **env)
+void	secondchild(char **argv, int *readwrite)
 {
 	int	fdoutfile;
 
@@ -61,25 +62,26 @@ void	secondchild(char **argv, int *readwrite, char **env)
 	close(readwrite[1]);
 	dup2(readwrite[0], 0);
 	dup2(fdoutfile, 1);
-	pathfilter(argv[3], env);
+	pathfilter(argv[3]);
 }
 
-void	pathfilter(char *argv, char **env)
+void	pathfilter(char *argv)
 {
-	char	**paths;
-	char	**arguments;
-	int		i;
-	int		countargs;
+	extern char	**environ;
+	char		**paths;
+	char		**arguments;
+	int			i;
+	int			countargs;
 
 	i = 0;
 	countargs = 0;
 	arguments = ft_split_quotes(argv, ' ');
 	while (arguments[countargs++])
-		arguments[countargs] = ft_strtrim(arguments[countargs], "'\"");
-	while (env[i])
+		arguments[countargs] = ft_stredgestrim(arguments[countargs], "'\"");
+	while (environ[i])
 	{
-		if (ft_strncmp(env[i], "PATH=", 5) == 0)
-			paths = ft_split(&env[i][5], ':');
+		if (ft_strncmp(environ[i], "PATH=", 5) == 0)
+			paths = ft_split(&environ[i][5], ':');
 		i++;
 	}
 	doexecve(paths, arguments);

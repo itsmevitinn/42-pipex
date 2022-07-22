@@ -4,17 +4,19 @@ MAKE_IN_DIRECTORY = make -C
 
 MAKELIBFT = ${MAKE_IN_DIRECTORY} ${LIBFT_PATH}
 
-NAME	= pipex
+NAME = pipex
 
-NAME_BONUS	= pipex_bonus
+NAME_BONUS = pipex_bonus
 
-LIBNAME = libftpipex.a
+SRCS	= pipex.c error_handling.c 
 
-CPLIBFT = cp ${LIBFT_PATH}/libft.a libftpipex.a
-
-SRCS	= pipex_utils.c error_handling.c 
+SRCS_BONUS	= pipex_bonus.c pipex_utils_bonus.c error_handling_bonus.c
 
 OBJS	= ${SRCS:.c=.o}
+
+OBJS_BONUS	= ${SRCS_BONUS:.c=.o}
+
+LIBFTPATH = ./libft/libft.a
 
 CC		= cc
 
@@ -22,29 +24,30 @@ RM		= rm -f
 
 CFLAGS	= -Wall -Wextra -Werror
 
-AR_RCS 	= ar rcs
-
 .c.o:
 			${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
-$(NAME):	${OBJS}
-			${MAKELIBFT} && ${CPLIBFT} && ${AR_RCS} ${LIBNAME} ${OBJS}
-			${CC} ${NAME}.c ${LIBNAME} -o ${NAME}
+$(NAME):	${OBJS} $(LIBFTPATH)
+			${CC} ${OBJS} $(LIBFTPATH) -o $(NAME)
 
-bonus:		${OBJS}
-			${MAKELIBFT} && ${CPLIBFT} && ${AR_RCS} ${LIBNAME} ${OBJS}
-			${CC} ${NAME_BONUS}.c ${LIBNAME} -o ${NAME_BONUS}
+$(NAME_BONUS):	${OBJS_BONUS} $(LIBFTPATH)
+				${CC} ${OBJS_BONUS} $(LIBFTPATH) -o $(NAME_BONUS)
+
+$(LIBFTPATH): 
+			${MAKELIBFT}
+
+bonus: ${NAME_BONUS}
 
 all:		$(NAME)
 
 clean:		
-			${RM} ${OBJS}
+			${RM} ${OBJS} ${OBJS_BONUS}
 			${MAKE_IN_DIRECTORY} ${LIBFT_PATH} clean
 
 fclean:		clean
-			${RM} ${LIBNAME}
+			${RM} ${NAME} ${NAME_BONUS}
 			${MAKE_IN_DIRECTORY} ${LIBFT_PATH} fclean
 
 re:		fclean all
 
-.PHONY:		all clean fclean re
+.PHONY:		all clean fclean re bonus

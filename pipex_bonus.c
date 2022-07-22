@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/21 17:35:57 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/22 17:03:19 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ int	main(int argc, char *argv[])
 	check_argc(argc);
 	countfd = 0;
 	countpid = 0;
-	pid = (int *)malloc(sizeof(int) * 2);
 	readwrite = (int **)malloc(sizeof(int *) * (argc - 3));
 	while (countfd < argc - 3)
 		readwrite[countfd++] = (int *)malloc(sizeof(int) * 2);
+	pid = (int *)malloc(sizeof(int) * 2);
 	do_pipes(argc, readwrite);
 	pid[countpid++] = first_command(argv, argc, readwrite);
 	while (countpid < argc - 4)
@@ -36,7 +36,7 @@ int	main(int argc, char *argv[])
 	pid[countpid] = last_command(argv, argc, readwrite, countpid);
 	close_all(argc, readwrite);
 	waitpids(pid, argc);
-	free_pointers(readwrite, pid);
+	free_pointers(readwrite, pid, argc);
 	return (0);
 }
 
