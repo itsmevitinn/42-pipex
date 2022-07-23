@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 16:28:13 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/23 00:59:40 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/23 09:28:20 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	doexecve(char **paths, char **arguments)
 	i = 0;
 	while (paths[i++])
 	{
+		if (!access(arguments[0], F_OK | X_OK))
+			execve(arguments[0], arguments, NULL);
 		pathdone = ft_strjoin(paths[i], "/");
 		commandpath = ft_strjoin(pathdone, arguments[0]);
 		free(pathdone);
