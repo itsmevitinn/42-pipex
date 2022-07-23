@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 16:28:13 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/22 17:04:35 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/23 00:59:40 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	doexecve(char **paths, char **arguments)
 			execve(commandpath, arguments, NULL);
 		free(commandpath);
 	}
-	perror("Command not found!");
+	error_msg("Command not found", 127);
 }
 
 void	close_all(int argc, int **readwrite)

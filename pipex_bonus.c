@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/22 17:03:19 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/23 01:04:51 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	first_command(char **argv, int argc, int **readwrite)
 		}
 		fdinfile = open(argv[1], O_RDONLY);
 		if (fdinfile == -1)
-			error_msg("Failed to open infile!", 2);
+			error_msg("Failed to open infile!", 1);
 		runcmds(argv[2], fdinfile, readwrite[0][1]);
 	}
 	return (pid);
@@ -119,7 +119,7 @@ int	last_command(char **argv, int argc, int **readwrite, int indexpipe)
 		}
 		fdoutfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 		if (fdoutfile == -1)
-			error_msg("Failed to open outfile!", 2);
+			error_msg("Failed to open outfile!", 1);
 		runcmds(argv[argc - 2], readwrite[indexpipe - 1][0], fdoutfile);
 	}
 	return (pid);
