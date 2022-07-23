@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/23 01:04:51 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/23 13:07:37 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,32 @@ int	first_command(char **argv, int argc, int **readwrite)
 				close(readwrite[indexchecker][1]);
 			}
 			indexchecker++;
+		}
+		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+		{
+			int fdheredoc = open("here_doc", O_RDONLY);
+			int fdtemp = open("tempfile.txt", O_WRONLY | O_CREAT | O_APPEND, 0666);
+			if (fdheredoc == -1 || fdtemp == -1)
+				error_msg("Failed to open file!", 1);
+			char *content;
+			char *checklimiter;
+			printf("Limiter: %s\n", argv[2]);
+			content = get_next_line(fdheredoc);
+			checklimiter = ft_strtrim(content, "\n");
+			while (ft_strncmp(checklimiter, argv[2], ft_strlen(checklimiter)) && content != NULL)
+			{
+				free(checklimiter);
+				write(fdtemp, content, ft_strlen(content));
+				free(content);
+				content = get_next_line(fdheredoc);
+				checklimiter = ft_strtrim(content, "\n");
+				printf("Check limiter: %s ", checklimiter);
+				printf("Nossa string: %s", content);
+			}
+			// free(content);
+			int fdout = open("tempfile.txt", O_RDONLY);
+			// unlink("tempfile.txt");
+			runcmds(argv[3], fdout, readwrite[0][1]);
 		}
 		fdinfile = open(argv[1], O_RDONLY);
 		if (fdinfile == -1)
@@ -117,7 +143,10 @@ int	last_command(char **argv, int argc, int **readwrite, int indexpipe)
 			}
 			indexchecker++;
 		}
-		fdoutfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
+		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+			fdoutfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND, 0666);
+		else
+			fdoutfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 		if (fdoutfile == -1)
 			error_msg("Failed to open outfile!", 1);
 		runcmds(argv[argc - 2], readwrite[indexpipe - 1][0], fdoutfile);

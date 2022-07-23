@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:14:39 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/22 17:39:40 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/23 09:51:35 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PIPEX_BONUS_H
 
 # include "libft/libft.h"
+# include "get_next_line.h"
 # include <fcntl.h>
 # include <errno.h>
 # include <stdio.h>
