@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/05 13:02:07 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/25 01:04:49 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/25 10:07:23 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	free_stash(t_listgnl *stash)
 	}
 }
 
-int	ft_strlen_gnl(const char	*str)
+int	ft_len(const char	*str)
 {
 	int	i;
 

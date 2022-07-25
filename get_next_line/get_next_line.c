@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 11:01:02 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/25 01:05:27 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/25 10:05:45 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void	clean_stash(t_listgnl **stash)
 		i++;
 	if (last->string && last->string[i] == '\n')
 		i++;
-	new->string = malloc(sizeof(char) * ((ft_strlen_gnl(last->string) - i) + 1));
+	new->string = malloc(sizeof(char) * ((ft_len(last->string) - i) + 1));
 	new->next = NULL;
 	if (new->string == NULL)
 		return ;
