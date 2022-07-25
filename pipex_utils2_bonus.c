@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 04:24:43 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/24 06:41:44 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/25 01:07:52 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	here_doc(char **argv, int **readwrite)
 {
 	char	*line;
-	char	*checker;
+	char	*check;
 	int		fdheredoc;
 	int		fdtemp;
 	int		fdout;
@@ -25,15 +25,16 @@ void	here_doc(char **argv, int **readwrite)
 	if (fdheredoc == -1 || fdtemp == -1)
 		error_msg("Failed to open file!", 1);
 	line = get_next_line(fdheredoc);
-	checker = ft_strtrim(line, "\n");
-	while (ft_strncmp(checker, argv[2], ft_strlen(checker)) != 0 && line != NULL)
+	check = ft_strtrim(line, "\n");
+	while (ft_strncmp(check, argv[2], ft_strlen(check)) != 0 && line != NULL)
 	{
-		free(checker);
+		free(check);
 		write(fdtemp, line, ft_strlen(line));
 		free(line);
 		line = get_next_line(fdheredoc);
-		checker = ft_strtrim(line, "\n");
+		check = ft_strtrim(line, "\n");
 	}
+	close(fdtemp);
 	fdout = open("tempfile.txt", O_RDONLY);
 	unlink("tempfile.txt");
 	runcmds(argv[3], fdout, readwrite[0][1]);

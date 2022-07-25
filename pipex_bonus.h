@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:14:39 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/24 06:07:43 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/25 00:33:17 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # include <stdio.h>
 # include <sys/wait.h>
 
+void	close_first_pipe(int argc, int **readwrite);
+void	close_middle_pipes(int argc, int usedpipe, int **readwrite);
+void	close_last_pipe(int argc, int usedpipe, int **readwrite);
 int		do_files(char *argv, int type);
 void	here_doc(char **argv, int **readwrite);
 void	check_argc(int argc);

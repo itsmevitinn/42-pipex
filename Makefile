@@ -10,7 +10,7 @@ NAME_BONUS = pipex_bonus
 
 SRCS	= pipex.c error_handling.c 
 
-SRCS_BONUS	= ./get_next_line/get_next_line.c ./get_next_line/get_next_line_utils.c pipex_bonus.c pipex_utils_bonus.c error_handling_bonus.c pipex_utils2_bonus.c
+SRCS_BONUS	= ./get_next_line/get_next_line.c ./get_next_line/get_next_line_utils.c pipex_bonus.c pipex_utils_bonus.c error_handling_bonus.c pipex_utils2_bonus.c commands_bonus.c close_pipes_bonus.c
 
 OBJS	= ${SRCS:.c=.o}
 
