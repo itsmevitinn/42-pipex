@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/15 09:21:47 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/22 09:23:24 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/26 12:09:44 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,5 @@ void	error_msg_errno(char *msg, int errorstatus, int iderrno)
 void	check_argc(int argc)
 {
 	if (argc < 5)
-		error_msg_errno("ERROR", 22, 22);
+		error_msg_errno("zsh", 22, 22);
 }

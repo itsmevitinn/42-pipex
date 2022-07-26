@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/22 09:37:31 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/26 12:07:56 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(int argc, char **argv)
 	int	pid2;
 
 	if (argc != 5)
-		error_msg_errno("ERROR", 22, 22);
+		error_msg_errno("zsh", 22, 22);
 	if (pipe(readwrite) == -1)
 		error_msg("Failed to do pipe!", 32);
 	pid = fork();
@@ -45,7 +45,7 @@ void	firstchild(char **argv, int *readwrite)
 
 	fdinfile = open(argv[1], O_RDONLY);
 	if (fdinfile == -1)
-		error_msg("Failed to open infile!", 2);
+		error_msg(argv[1], 2);
 	close(readwrite[0]);
 	dup2(fdinfile, 0);
 	dup2(readwrite[1], 1);
@@ -58,7 +58,7 @@ void	secondchild(char **argv, int *readwrite)
 
 	fdoutfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (fdoutfile == -1)
-		error_msg("Failed to open outfile!", 2);
+		error_msg(argv[4], 2);
 	close(readwrite[1]);
 	dup2(readwrite[0], 0);
 	dup2(fdoutfile, 1);
@@ -103,5 +103,5 @@ void	doexecve(char **paths, char **arguments)
 			execve(commandpath, arguments, NULL);
 		free(commandpath);
 	}
-	perror("Command not found!");
+	error_msg("zsh: command not found", 127);
 }
