@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 16:28:13 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/25 00:40:03 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/26 11:58:22 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,5 @@ void	doexecve(char **paths, char **arguments)
 			execve(commandpath, arguments, NULL);
 		free(commandpath);
 	}
-	error_msg("Command not found", 127);
+	error_msg("zsh: command not found", 127);
 }

@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 04:24:43 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/25 10:12:56 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/07/26 12:00:55 by vsergio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,19 @@ int	do_files(char *argv, int type)
 	{
 		fdfile = open(argv, O_RDONLY);
 		if (fdfile == -1)
-			error_msg("Failed to open infile!", 1);
+			error_msg(argv, 1);
 	}
 	else if (type == 1)
 	{
 		fdfile = open(argv, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 		if (fdfile == -1)
-			error_msg("Failed to open outfile!", 1);
+			error_msg(argv, 1);
 	}
 	else
 	{
 		fdfile = open(argv, O_WRONLY | O_CREAT | O_APPEND, 0666);
 		if (fdfile == -1)
-			error_msg("Failed to open here_doc outfile!", 1);
+			error_msg(argv, 1);
 	}
 	return (fdfile);
 }
