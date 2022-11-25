@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 21:26:12 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/24 06:29:23 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/11/25 18:56:34 by Vitor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 
 char	*ft_strtrim(char const *s1, char const *set);
 
-char	*ft_stredgestrim(char const *s1, char const *set);
+char	*ft_strtrim_edges(char const *s1, char const *set);
 
 void	ft_putchar_fd(char c, int fd);
 

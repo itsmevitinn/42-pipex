@@ -6,7 +6,7 @@
 /*   By: vsergio <vsergio@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 13:12:28 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/26 12:07:56 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/11/25 18:57:11 by Vitor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	pathfilter(char *argv)
 	countargs = 0;
 	arguments = ft_split_quotes(argv, ' ');
 	while (arguments[countargs++])
-		arguments[countargs] = ft_stredgestrim(arguments[countargs], "'\"");
+		arguments[countargs] = ft_strtrim_edges(arguments[countargs], "'\"");
 	while (environ[i])
 	{
 		if (ft_strncmp(environ[i], "PATH=", 5) == 0)

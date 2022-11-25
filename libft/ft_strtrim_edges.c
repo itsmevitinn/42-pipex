@@ -6,13 +6,13 @@
 /*   By: vsergio <vsergio@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 09:20:23 by vsergio           #+#    #+#             */
-/*   Updated: 2022/07/22 10:42:04 by vsergio          ###   ########.fr       */
+/*   Updated: 2022/11/25 18:54:23 by Vitor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_stredgestrim(char const *s1, char const *set)
+char	*ft_strtrim_edges(char const *s1, char const *set)
 {
 	char	*str1;
 	int		i_start;
